@@ -20,7 +20,7 @@ module Filterable
       filter_factory[filter_name] = filter_class
     end
 
-    def_delegators :filtered_collection, *Enumerable.instance_methods, :empty?
+    def_delegators :filtered_collection, *Enumerable.instance_methods, :empty?, :to_ary
 
     protected
 
