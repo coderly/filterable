@@ -22,6 +22,12 @@ module Filterable
 
     def_delegators :filtered_collection, *Enumerable.instance_methods, :empty?
 
+    protected
+
+    def filtered_collection
+      @filtered_collection ||= apply_filters base_collection
+    end
+
     private
 
     attr_reader :base_collection, :filter_options
@@ -32,10 +38,6 @@ module Filterable
 
     def apply_filters(collection)
       filters.inject(collection) { |c, filter| filter.call(c) }
-    end
-
-    def filtered_collection
-      @filtered_collection ||= apply_filters base_collection
     end
 
     def filter_factory
