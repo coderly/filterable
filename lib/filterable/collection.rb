@@ -1,15 +1,21 @@
 require 'forwardable'
 
 require 'filterable/filter_factory'
+require 'filterable/hash_builder'
 
 module Filterable
 
   class Collection
     extend Forwardable
 
-    def initialize(base_collection, filter_options = {})
+    def initialize(base_collection, filter_options = {}, &filter_options_block)
       @base_collection = base_collection
-      @filter_options = filter_options
+
+      if block_given?
+        @filter_options = HashBuilder.build(&filter_options_block)
+      else
+        @filter_options = filter_options
+      end
     end
 
     def self.filter_factory

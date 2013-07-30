@@ -36,6 +36,20 @@ module Filterable
       subject { collection }
 
       its(:to_a) { should eq [6, 9] }
+
+
+      context 'when defining a collection using a block' do
+        let(:collection) do
+          NumberCollection.new(numbers) do
+            multiple 2
+            gt 3
+          end
+        end
+
+        its(:to_a) { should eq [4, 6, 8] }
+
+      end
+
     end
 
   end
