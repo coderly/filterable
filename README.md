@@ -1,3 +1,5 @@
+[![Code Climate](https://codeclimate.com/github/coderly/filterable.png)](https://codeclimate.com/github/coderly/filterable)
+
 # Filterable
 
 TODO: Write a gem description
