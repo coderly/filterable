@@ -52,5 +52,34 @@ module Filterable
 
     end
 
+    context 'when defining a filter with default/extra parameters' do
+
+      class RangeFilter
+        def initialize(options)
+          @min = options.fetch(:min)
+          @max = options.fetch(:max)
+        end
+
+        def call(values)
+          values.select { |v| @min <= v && v <= @max }
+        end
+      end
+
+      class RangeCollection < Collection
+        filter :range, RangeFilter, min: 3, max: 6
+      end
+
+      let(:collection) { RangeCollection.new(numbers, range: {min: 2}) }
+      subject { collection }
+
+      its(:to_a) { should eq [2, 3, 4, 5, 6] }
+
+      context 'when the filter isnt included in the options' do
+        let(:collection) { RangeCollection.new(numbers) }
+        its(:to_a) { should eq [1, 2, 3, 4, 5, 6, 7, 8, 9] }
+      end
+
+    end
+
   end
 end

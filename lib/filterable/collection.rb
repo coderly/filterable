@@ -22,8 +22,8 @@ module Filterable
       @filter_factory ||= FilterFactory.new
     end
 
-    def self.filter(filter_name, filter_class)
-      filter_factory[filter_name] = filter_class
+    def self.filter(filter_name, filter_class, defaults = {})
+      filter_factory.register filter_name, filter_class, defaults
     end
 
     def_delegators :filtered_collection, *Enumerable.instance_methods, :empty?, :to_ary

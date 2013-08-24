@@ -1,6 +1,6 @@
-module Filterable
+require 'pry'
 
-  NoFilterError = Class.new(StandardError)
+module Filterable
 
   class NilFilter
     def initialize(*)
@@ -16,16 +16,27 @@ module Filterable
       @factories = {}
     end
 
-    def []=(filter_name, filter_class)
-      @factories[filter_name] = filter_class
-    end
-
-    def [](filter_name)
-      @factories.fetch(filter_name) { NilFilter }
+    def register(filter_name, filter_class, defaults = {})
+      @factories[filter_name] = [filter_class, defaults]
     end
 
     def build(filter_name, options = {})
-      self[filter_name].new(options)
+      klass, defaults = fetch(filter_name)
+      klass.new build_options(options, defaults)
+    end
+
+    private
+
+    def build_options(options, defaults)
+      if defaults.respond_to?(:to_hash) && options.respond_to?(:to_hash)
+        defaults.to_hash.merge(options.to_hash)
+      else
+        options
+      end
+    end
+
+    def fetch(filter_name)
+      @factories.fetch(filter_name) { [NilFilter, {}] }
     end
 
   end
