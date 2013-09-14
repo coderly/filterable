@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/coderly/filterable.png)](https://travis-ci.org/coderly/filterable)
 [![Code Climate](https://codeclimate.com/github/coderly/filterable.png)](https://codeclimate.com/github/coderly/filterable)
 
 # Filterable
