@@ -18,12 +18,8 @@ module Filterable
       end
     end
 
-    def self.filter_factory
-      @filter_factory ||= FilterFactory.new
-    end
-
-    def self.filter(filter_name, filter_class, defaults = {})
-      filter_factory.register filter_name, filter_class, defaults
+    def self.filter(filter_name, filter_class, *args)
+      filter_factory.register filter_name, filter_class, *args
     end
 
     def_delegators :filtered_collection, *Enumerable.instance_methods, :empty?, :to_ary
@@ -35,6 +31,10 @@ module Filterable
     end
 
     private
+
+    def self.filter_factory
+      @filter_factory ||= FilterFactory.new
+    end
 
     attr_reader :base_collection, :filter_options
 

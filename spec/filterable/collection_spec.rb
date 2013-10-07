@@ -1,4 +1,5 @@
 require 'filterable/collection'
+require 'pry'
 
 module Filterable
   describe Collection do
@@ -55,9 +56,9 @@ module Filterable
     context 'when defining a filter with default/extra parameters' do
 
       class RangeFilter
-        def initialize(options)
-          @min = options.fetch(:min)
-          @max = options.fetch(:max)
+        def initialize(options, defaults = {})
+          @min = options.fetch(:min) { defaults[:min] }
+          @max = options.fetch(:max) { defaults[:max] }
         end
 
         def call(values)

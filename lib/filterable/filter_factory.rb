@@ -1,12 +1,6 @@
-module Filterable
+require 'filterable/nil_filter'
 
-  class NilFilter
-    def initialize(*)
-    end
-    def call(collection)
-      collection
-    end
-  end
+module Filterable
 
   class FilterFactory
 
@@ -14,26 +8,18 @@ module Filterable
       @factories = {}
     end
 
-    def register(filter_name, filter_class, defaults = {})
-      @factories[filter_name] = [filter_class, defaults]
+    def register(filter_name, filter_class, *filter_args)
+      @factories[filter_name] = [filter_class, *filter_args]
     end
 
-    def build(filter_name, options = {})
-      klass, defaults = fetch(filter_name)
-      klass.new build_options(options, defaults)
+    def build(filter_name, filter_options = {})
+      filter_class, *filter_args = filter_class_and_args(filter_name)
+      filter_class.new(filter_options, *filter_args)
     end
 
     private
 
-    def build_options(options, defaults)
-      if defaults.respond_to?(:to_hash) && options.respond_to?(:to_hash)
-        defaults.to_hash.merge(options.to_hash)
-      else
-        options
-      end
-    end
-
-    def fetch(filter_name)
+    def filter_class_and_args(filter_name)
       @factories.fetch(filter_name) { [NilFilter, {}] }
     end
 
